@@ -27,7 +27,7 @@ while( $users = $resultats->fetch()){
     ];
 // --------------gère les réseaux---------------
     $mail = [
-      "email" => $users['mail'],
+      "email" => ["nom" => "email", "url" => $users['mail']
     ];
     array_push($tableau['reseaux'], $mail);
 
