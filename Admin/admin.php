@@ -142,7 +142,9 @@
 
     var traiteResultat = function(){
         var data = this.responseText;
-        console.log(data);
+        var url = this.responseURL;
+        console.log('url => ',url);
+        console.log('data => ',data);
     }
 
     var div = document.getElementsByClassName('div');
@@ -210,7 +212,7 @@
         request.send();
         document.getElementsByClassName('renommage')[i].style.display = 'none';
         document.getElementsByClassName('renom')[i].style.display = 'block';
-        
+        location.reload();
     }
     
     </script>
