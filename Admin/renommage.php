@@ -1,14 +1,14 @@
 <?php
 
-if(isset($_GET['renom']) == false){
+if(isset($_GET['techno'])&&isset($_GET['renom'])){
     
-    echo 'Aucune donnée saisie !';
-    
-}else if(isset($_GET['techno'])&&isset($_GET['renom'])){
-    
-    $techno = htmlentities(trim($_GET['techno']));
-    $renom = htmlentities(trim($_GET['renom']));
-    
+    $techno = trim($_GET['techno']);
+    $renom = trim($_GET['renom']);
+    if($renom == ""){
+        echo "aucune donnée saise";
+        return;
+    }else{
+        
             try
         {
             $connect = new PDO('mysql:host=localhost; dbname=simplonsite; charset=utf8', 'root', 'root');
@@ -21,6 +21,7 @@ if(isset($_GET['renom']) == false){
             $request->bindParam(':techno', $techno, PDO::PARAM_STR);
             $result = $request->execute();
             echo 'Result : '.$result;
+    }
         }else{
             echo 'Result : '.$result;
         }

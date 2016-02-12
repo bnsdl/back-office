@@ -14,7 +14,6 @@ if(isset($_GET['techno'])){
             $request = $connect->prepare("DELETE FROM `techno` WHERE `techno`=:techno");
             $request->bindParam(":techno", $techno, PDO::PARAM_STR);
             $result = $request->execute();
-            error_log($request);
             echo 'Result : '.$result;
         }else{
             echo 'Result : '.$result;
