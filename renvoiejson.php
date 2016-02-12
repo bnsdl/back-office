@@ -21,35 +21,37 @@ while( $users = $resultats->fetch()){
       "presentation"=>$users["description"],
       "codepen"=>$users["codepen"],
       "portfolio"=>$users["siteperso"],
+      "github"=>$users["git"],
       "competences"=>[],
       "reseaux"=>[],
     ];
-    if(($users["twitter"]=="") and ($users["linked"]==null)){
-      $reseau =[
-        "email" => $users["mail"],
-        "cv" => $users["cv"],
+// --------------gère les réseaux---------------
+    $mail = [
+      "email" => $users['mail'],
+    ];
+    array_push($tableau['reseaux'], $mail);
+
+    if($users["cv"] !== ""){
+      $cv =[
+        "cv" => ["nom" => "cv", "url" => $users['cv']]
       ];
-    }else if($users["twitter"]==""){
-      $reseau =[
-        "linkedin" => $users["linked"],
-        "email" => $users["mail"],
-        "cv" => $users["cv"],
-      ];
-    }else if($users["linked"]==null){
-      $reseau =[
-        "twitter" => $users["twitter"],
-        "email" => $users["mail"],
-        "cv" => $users["cv"],
-      ];
-    }else{
-      $reseau =[
-        "twitter" => $users["twitter"],
-        "linkedin" => $users["linked"],
-        "email" => $users["mail"],
-        "cv" => $users["cv"],
-      ];
+      array_push($tableau['reseaux'], $cv);
     }
-    array_push($tableau["reseaux"],$reseau);
+    if($users["twitter"] !== ""){
+      $twitter =[
+        "twitter" => ["nom" => "twitter", "url" => $users["twitter"]]
+      ];
+      array_push($tableau['reseaux'], $twitter);
+    }
+    if($users["linked"] !== ""){
+      $linked =[
+        "linkedin" => ["nom" => "linkedin", "url" => $users["linked"]]
+      ];
+      array_push($tableau['reseaux'], $linked);
+    }
+
+// --------------------gère les niveau de compétences
+
     $id=$users["id"];
     $id=$bdd->quote($id);
     $requete2="SELECT*FROM  `techno` INNER JOIN competences ON techno.id = competences.idt WHERE ida=$id ORDER BY niveau desc";
