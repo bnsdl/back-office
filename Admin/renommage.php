@@ -1,6 +1,10 @@
 <?php
 
-if(isset($_GET['techno'])&&isset($_GET['renom'])){
+if(isset($_GET['renom']) == false){
+    
+    echo 'Aucune donnée saisie !';
+    
+}else if(isset($_GET['techno'])&&isset($_GET['renom'])){
     
     $techno = htmlentities(trim($_GET['techno']));
     $renom = htmlentities(trim($_GET['renom']));
@@ -16,7 +20,6 @@ if(isset($_GET['techno'])&&isset($_GET['renom'])){
             $request->bindParam(':renom', $renom, PDO::PARAM_STR);
             $request->bindParam(':techno', $techno, PDO::PARAM_STR);
             $result = $request->execute();
-            error_log($request);
             echo 'Result : '.$result;
         }else{
             echo 'Result : '.$result;
