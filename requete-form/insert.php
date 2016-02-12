@@ -1,5 +1,8 @@
 <?php
-$newTech = $_GET['name'];
+
+if (isset($_GET['name'])) {
+  $newTech = $_GET['name'];
+}
 
 try
 {
@@ -10,9 +13,9 @@ catch (Exception $e){
 }
 
 
-
 $insertion = "INSERT INTO techno (`id`, `techno`) VALUES (NULL, :newTech)";
 $requete = $connect->prepare($insertion);
 $requete->bindParam(':newTech', $newTech, PDO::PARAM_STR);
 $result = $requete->execute(); // renvoie TRUE || FALSE
+
 ?>
