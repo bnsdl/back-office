@@ -9,7 +9,7 @@ echo $tel;
 
 
 try {
-  $connect=new PDO('mysql:host=localhost;dbname=simplonsite;charset=utf8','root','');
+  $connect=new PDO('mysql:host=localhost;dbname=simplonsite;charset=utf8','root','root');
 }
   catch (Exception $e){
 die ('erreur : '.$e->getMessage());
@@ -25,7 +25,7 @@ $requete1->execute(); // renvoie TRUE || FALSE
 
 
 
-      
+
       $insertion ="UPDATE lien SET mail=:mail WHERE id=:iduser";
       $requete = $connect->prepare($insertion);
       $requete->bindParam(':mail', $mail, PDO::PARAM_STR);

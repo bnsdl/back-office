@@ -10,7 +10,7 @@ $siteperso=$_GET["siteperso"];
 
 
 try {
-  $connect=new PDO('mysql:host=localhost;dbname=simplonsite;charset=utf8','root','');
+  $connect=new PDO('mysql:host=localhost;dbname=simplonsite;charset=utf8','root','root');
 }
   catch (Exception $e){
 die ('erreur : '.$e->getMessage());
