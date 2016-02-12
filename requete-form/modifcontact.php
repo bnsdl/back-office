@@ -9,19 +9,26 @@ echo $tel;
 
 
 try {
-  $connexion=new PDO('mysql:host=localhost;dbname=simplonsite;charset=utf8','root','root');
+  $connect=new PDO('mysql:host=localhost;dbname=simplonsite;charset=utf8','root','');
 }
   catch (Exception $e){
 die ('erreur : '.$e->getMessage());
 }
 
-       $requete="UPDATE `lien` SET `tel`='$tel' WHERE id=$iduser";
-       $reponses  = $connexion->query($requete);
-      //  $reponses->closeCursor();
 
-      $requete="UPDATE lien SET mail='$mail' WHERE id=$iduser";
-      $reponses  = $connexion->query($requete);
-      $reponses->closeCursor();
+$insertion ="UPDATE lien SET tel=:tel WHERE id=:iduser";
+$requete1 = $connect->prepare($insertion);
+$requete1->bindParam(':tel', $tel, PDO::PARAM_INT);
+$requete1->bindParam(':iduser', $iduser, PDO::PARAM_INT);
+$requete1->execute(); // renvoie TRUE || FALSE
 
 
+
+
+      
+      $insertion ="UPDATE lien SET mail=:mail WHERE id=:iduser";
+      $requete = $connect->prepare($insertion);
+      $requete->bindParam(':mail', $mail, PDO::PARAM_STR);
+      $requete->bindParam(':iduser', $iduser, PDO::PARAM_INT);
+      $requete->execute(); // renvoie TRUE || FALSE
 ?>
