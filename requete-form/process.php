@@ -1,44 +1,52 @@
 <?php
 
-session_start();
-$idUser = $_SESSION['iduser'];
-$niveau = $_GET['niveau'];
-$techno = $_GET['techno'];
-
-// echo $_SESSION['iduser'];
-
-try
-{
+if (isset($_GET['niveau']) && isset($_GET['techno'])){
+  
+  session_start();
+  $idUser = $_SESSION['iduser'];
+  $niveau = $_GET['niveau'];
+  $techno = $_GET['techno'];
+  
+  try
+  {
     $connect = new PDO('mysql:host=localhost; dbname=simplonsite; charset=utf8', 'root', 'root');
-}
-catch (Exception $e){
+  }
+  catch (Exception $e){
     die('Erreur : '.$e->getMessage());
-}
-
-$request = "SELECT * FROM `techno` WHERE `techno`='$techno'";
-$results = $connect->query($request);
-$data = $results->fetch();
-$idt = $data['id'];
-echo $idt;
-$select = "SELECT * FROM `competences` WHERE `ida`=$idUser AND `idt`=$idt";
-$result = $connect->query($select);
-$count = $result->rowCount();
-if($count < 1){
-    // if($niveau > 0){
-        $request2 = "INSERT INTO `competences`(`ida`, `idt`, `niveau`) VALUES ($idUser,$idt,$niveau)";
-        $results2 = $connect->exec($request2);
-    // } else {
-    //     $request2 = "DELETE FROM `competences` WHERE `ida`=$idUser AND `idt`=$idt";
-    //     $result2 = $connect->exec($request2);
-    // }
-}else{
-    // if($niveau > 0){
-        $request2 = "UPDATE `competences` SET `niveau` = $niveau WHERE `idt` =$idt AND `ida`=$idUser";
-        echo $request2;
-        $result2 = $connect->exec($request2);
-    // } else {
-    //     $request2 = "DELETE FROM `competences` WHERE `ida`=$idUser AND `idt`=$idt";
-    //     $result2 = $connect->exec($request2);
-    // }
+  }
+  
+  $request = $connect->prepare( "SELECT * FROM `techno` WHERE `techno`=:techno");
+  $request->bindParam(':techno', $techno, PDO::PARAM_STR);
+  $request->execute();
+  $data = $request->fetch();
+  $idt = $data['id'];
+  
+  $select = $connect->prepare("SELECT * FROM `competences` WHERE `ida`=:idUser AND `idt`=:idt");
+  $select->bindParam(':idUser', $idUser, PDO::PARAM_INT);
+  $select->bindParam(':idt', $idt, PDO::PARAM_INT);
+  $select->execute();
+  $count = $select->rowCount();
+  
+  if($count < 1) {
+    
+    // echo "count<1";
+    $request2 = $connect->prepare("INSERT INTO `competences` (`ida`, `idt`, `niveau`) VALUES (:ida, :idt, :niveau)");
+    $request2->bindParam(':ida', $idUser, PDO::PARAM_INT);
+    $request2->bindParam(':idt', $idt, PDO::PARAM_INT);
+    $request2->bindParam(':niveau', $niveau, PDO::PARAM_STR);
+    $request2->execute();  
+  }
+  else {
+      
+    // echo "else";
+    $request2 = $connect->prepare("UPDATE `competences` SET `niveau` = :niveau WHERE `idt` =:idt AND `ida`=:idUser");
+    $request2->bindParam(':idt', $idt, PDO::PARAM_INT);
+    $request2->bindParam(':idUser', $idUser, PDO::PARAM_INT);
+    $request2->bindParam(':niveau', $niveau, PDO::PARAM_INT);
+    $request2->execute();
+  }
+} 
+else {
+  echo "0";
 }
 ?>
